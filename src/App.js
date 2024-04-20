@@ -5,9 +5,9 @@ import Veiculos from './components/Veiculos';
 import '@coreui/coreui/dist/css/coreui.min.css';
 import Financas from "./components/Financas";
 import Calendario from "./components/Calendario";
+import Clientes from "./components/Clientes";
 import { mockAlugueis } from './data/mockAlugueis';
 import Registro from "./components/registro/Registro";
-
 
 function App() {
     const mainContentStyle = {
@@ -25,6 +25,7 @@ function App() {
                         <Route path="/financas" element={<Financas />} />
                         <Route path="/calendario" element={<Calendario alugueis={mockAlugueis} />} />
                         <Route path="/registro" element={<Registro />} />
+                        <Route path="/clientes" element={<Clientes />} />
                     </Routes>
                 </div>
             </div>

@@ -8,8 +8,9 @@ import {
     CInputGroup,
     CInputGroupText
 } from '@coreui/react';
+import { createCliente } from '../../api';
 
-const ClienteForm = ({ onSubmit }) => {
+const ClienteForm = () => {
     const [cliente, setCliente] = useState({
         nome: '',
         email: '',
@@ -31,9 +32,35 @@ const ClienteForm = ({ onSubmit }) => {
         setCliente(prevState => ({ ...prevState, foto: e.target.files[0] }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onSubmit(cliente);
+        const formData = new FormData();
+        Object.keys(cliente).forEach(key => {
+            if (key === 'foto' && cliente[key]) {
+                formData.append(key, cliente[key], cliente[key].name);
+            } else {
+                formData.append(key, cliente[key]);
+            }
+        });
+
+        try {
+            const response = await createCliente(formData);
+
+            setCliente({
+                nome: '',
+                email: '',
+                cpf: '',
+                rg: '',
+                cep: '',
+                rua: '',
+                numero: '',
+                cidade: '',
+                foto: null
+            });
+        } catch (error) {
+            console.error('Erro ao cadastrar cliente:', error);
+            alert('Falha ao cadastrar cliente.');
+        }
     };
 
     return (

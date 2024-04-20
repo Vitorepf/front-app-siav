@@ -48,6 +48,9 @@ const Sidebar = () => {
                 <CNavItem style={navLinkStyle}>
                     <CNavLink href="/veiculos">Veículos</CNavLink>
                 </CNavItem>
+                <CNavItem style={navLinkStyle}>
+                    <CNavLink href="/clientes">Clientes</CNavLink>
+                </CNavItem>
             </CSidebarNav>
         </CSidebar>
     );
