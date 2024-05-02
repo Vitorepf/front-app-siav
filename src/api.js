@@ -31,7 +31,7 @@ export const createCliente = async (formData) => {
     try {
         const response = await fetch(`${baseUrl}/clientes`, {
             method: 'POST',
-            body: formData  // Não defina 'Content-Type' para permitir que o navegador defina o boundary do multipart
+            body: formData
         });
         if (!response.ok) {
             throw new Error('Failed to post new client');

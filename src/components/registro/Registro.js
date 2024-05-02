@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import VeiculosForm from './VeiculosForm';
 import ClienteForm from './ClienteForm';
+import VeiculosForm from "./VeiculosForm";
 
 const Registro = () => {
     const [registroTipo, setRegistroTipo] = useState('veiculo');
