@@ -57,6 +57,8 @@ const ClienteForm = () => {
                 cidade: '',
                 foto: null
             });
+
+            return response
         } catch (error) {
             console.error('Erro ao cadastrar cliente:', error);
             alert('Falha ao cadastrar cliente.');

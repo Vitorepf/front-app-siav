@@ -25,6 +25,17 @@ export const fetchClienteById = async (id) => {
         console.error(`Failed to fetch client ${id}:`, error);
     }
 };
+export const fetchClienteByCpfCnpj= async (cpfcnpj) => {
+    try {
+        const response = await fetch(`${baseUrl}/clientes/${cpfcnpj}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(`Failed to fetch client ${cpfcnpj}:`, error);
+    }
+};
 
 // Função para criar um novo cliente com suporte a FormData
 export const createCliente = async (formData) => {

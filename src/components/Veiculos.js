@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState} from 'react';
+import Swal from 'sweetalert2'
 import {
     CCard,
     CCardBody,
@@ -8,6 +9,8 @@ import {
     CRow,
     CCol, CButton,
 } from '@coreui/react';
+import {fetchClienteByCpfCnpj, fetchClienteById, fetchClientes} from "../api";
+
 
 const veiculosData = [
     {
@@ -68,10 +71,86 @@ const veiculosData = [
         preco: 'R$ 150,00/dia',
     },
 ];
+function validaCpf(strCPF) {
+    var Soma;
+    var Resto;
+    Soma = 0;
+    if (strCPF == "00000000000") return false;
+
+    for (let i=1; i<=9; i++) Soma = Soma + parseInt(strCPF.substring(i-1, i)) * (11 - i);
+    Resto = (Soma * 10) % 11;
+
+    if ((Resto === 10) || (Resto === 11))  Resto = 0;
+    if (Resto !== parseInt(strCPF.substring(9, 10)) ) return false;
+
+    Soma = 0;
+    for (let i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i-1, i)) * (12 - i);
+    Resto = (Soma * 10) % 11;
+
+    if ((Resto === 10) || (Resto === 11))  Resto = 0;
+    if (Resto !== parseInt(strCPF.substring(10, 11) ) ) return false;
+    return true;
+}
+
+
 
 const Veiculos = () => {
+    const [cliente, setCliente] = useState();
+
+    const textClientes = async (cpfCnpj) => {
+        try {
+            const resposta = await fetchClienteByCpfCnpj(cpfCnpj);
+            if (resposta) {
+                setCliente(resposta);
+            } else {
+                throw new Error(`Erro na requisição: ${resposta.status}`);
+            }
+        } catch (error) {
+            console.error('Falha ao buscar dados dos clientes:', error);
+        }
+    }
+
     const handleAlugarClick = (veiculoId) => {
-        console.log('Veículo para alugar:', veiculoId);
+        Swal.fire({
+            title: `Alugar ${veiculosData[veiculoId].nome}`,
+            icon: "info",
+            text: "Insira o CPF/CNPJ do Cliente:",
+            input: "search",
+            confirmButtonText:"Buscar",
+            confirmButtonColor: "#0A6847",
+            cancelButtonText:"Cancelar",
+            cancelButtonColor: "#C40C0C",
+            showCancelButton: true,
+            preConfirm(inputValue) {
+                if(inputValue !== ""){
+                    if(validaCpf(inputValue)){
+                        const text = new Promise((resolve) => {
+                            textClientes(inputValue)
+                            resolve({
+                                "Nome": cliente.nome,
+                                "CPF/CNPJ": cliente.cpfCnpj,
+                                "Telefone": cliente.telefone,
+                                "Email": cliente.email
+                            })
+                        });
+                        Swal.fire({
+                            title:"Cliente",
+                            text,
+                        })
+                    }else{
+                        Swal.fire({
+                            title: "Insira um CPF válido!",
+                            icon: "warning"
+                        })
+                    }
+                }else{
+                    Swal.fire({
+                        title: "O campo de CPF/CNPJ deve estar preenchido!",
+                        icon: "warning"
+                    })
+                }
+            },
+        })
     };
 
     return (
