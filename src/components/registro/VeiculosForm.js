@@ -45,10 +45,32 @@ const VeiculosForm = ({ onSubmit }) => {
         setVeiculo(prevState => ({ ...prevState, foto: e.target.files[0] }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onSubmit(veiculo);
+        console.log("Enviando veículo:", veiculo);
+
+        try {
+            const response = await fetch('http://localhost:8080/veiculos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(veiculo)
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            console.log("Resposta do servidor:", data);
+            alert('Veículo cadastrado com sucesso!');
+        } catch (error) {
+            console.error("Erro ao enviar veículo:", error);
+            alert('Falha ao cadastrar veículo.');
+        }
     };
+
 
     return (
         <CForm onSubmit={handleSubmit}>

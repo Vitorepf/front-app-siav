@@ -1,18 +1,18 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-    CAlert,
+    CTable,
+    CTableHead,
+    CTableBody,
+    CTableRow,
+    CTableHeaderCell,
+    CTableDataCell,
     CCard,
     CCardBody,
     CCardHeader,
     CSpinner,
-    CTable,
-    CTableBody,
-    CTableDataCell,
-    CTableHead,
-    CTableHeaderCell,
-    CTableRow,
+    CAlert,
 } from '@coreui/react';
-import {fetchClientes} from '../api';
+import { fetchClientes } from '../api';
 
 const Clientes = () => {
     const [clientes, setClientes] = useState([]);
@@ -25,8 +25,9 @@ const Clientes = () => {
             setError(null);
             try {
                 const resposta = await fetchClientes();
-                if (resposta) {
-                    setClientes(resposta);
+                if (resposta.ok) {
+                    const dados = await resposta.json();
+                    setClientes(dados);
                 } else {
                     throw new Error(`Erro na requisição: ${resposta.status}`);
                 }
