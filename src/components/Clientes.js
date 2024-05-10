@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import {
     CTable,
     CTableHead,
@@ -25,8 +25,9 @@ const Clientes = () => {
             setError(null);
             try {
                 const resposta = await fetchClientes();
-                if (resposta.ok) {
-                    const dados = await resposta.json();
+                // Não esta entrando no if , resposta.ok é undefined trocando para !== null
+                if (resposta !== null) {
+                    const dados = await resposta;
                     setClientes(dados);
                 } else {
                     throw new Error(`Erro na requisição: ${resposta.status}`);
@@ -40,6 +41,19 @@ const Clientes = () => {
         };
         carregarClientes();
     }, []);
+
+    const clientesTabela = useMemo(() => {
+        return clientes.map(cliente => (
+            <CTableRow key={cliente.id}>
+                <CTableDataCell>{cliente.clienteNome}</CTableDataCell>
+                <CTableDataCell>{cliente.cpfCnpj}</CTableDataCell>
+                <CTableDataCell>{cliente.endereco}</CTableDataCell>
+                <CTableDataCell>{cliente.telefone}</CTableDataCell>
+                <CTableDataCell>{cliente.email}</CTableDataCell>
+            </CTableRow>
+        ));
+    }, [clientes]);
+
 
     return (
         <CCard>
@@ -65,17 +79,7 @@ const Clientes = () => {
                             </CTableRow>
                         </CTableHead>
                         <CTableBody>
-                            {clientes.length > 0 ? (
-                                clientes.map((cliente) => (
-                                    <CTableRow key={cliente.id}>
-                                        <CTableDataCell>{cliente.clienteNome}</CTableDataCell>
-                                        <CTableDataCell>{cliente.cpfCnpj}</CTableDataCell>
-                                        <CTableDataCell>{cliente.endereco}</CTableDataCell>
-                                        <CTableDataCell>{cliente.telefone}</CTableDataCell>
-                                        <CTableDataCell>{cliente.email}</CTableDataCell>
-                                    </CTableRow>
-                                ))
-                            ) : (
+                            {clientes.length > 0 ? clientesTabela : (
                                 <CTableRow>
                                     <CTableDataCell colSpan="5">
                                         Nenhum cliente encontrado
@@ -88,6 +92,6 @@ const Clientes = () => {
             </CCardBody>
         </CCard>
     );
-};
+}
 
-export default Clientes;
+    export default Clientes;
