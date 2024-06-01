@@ -1,28 +1,59 @@
-const baseUrl = 'http://localhost:8080';
+const baseUrl = 'http://localhost:8081';
 
-// Função para buscar todos os clientes
 export const fetchClientes = async () => {
     try {
-        const response = await fetch(`${baseUrl}/clientes`);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
+        const response = await fetch(`${baseUrl}/clientes`,{
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        });
         return await response.json();
     } catch (error) {
         console.error('Failed to fetch clients:', error);
     }
 };
 
-// Função para buscar um cliente pelo ID
 export const fetchClienteById = async (id) => {
     try {
-        const response = await fetch(`${baseUrl}/clientes/${id}`);
+        const response = await fetch(`${baseUrl}/clientes/${id}`,{
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        });
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
         return await response.json();
     } catch (error) {
         console.error(`Failed to fetch client ${id}:`, error);
+    }
+};
+export const fetchAllVehicles = async () => {
+    try {
+        const response = await fetch(`${baseUrl}/veiculos`,{
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        });
+        return await response.json();
+    } catch (error) {
+        console.error(`Failed to fetch client:`, error);
+    }
+};
+export const fetchAllSegurosAndAdicionais = async () => {
+    try {
+        const response = await fetch(`${baseUrl}/aluguel/adicionais-seguros`,{
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        });
+        return await response.json();
+    } catch (error) {
+        console.error(`Failed to fetch client:`, error);
     }
 };
 export const fetchClienteByCpfCnpj= async (cpfcnpj) => {
@@ -36,6 +67,16 @@ export const fetchClienteByCpfCnpj= async (cpfcnpj) => {
         console.error(`Failed to fetch client ${cpfcnpj}:`, error);
     }
 };
+export const fetchVeiculoById= async (id) => {
+    try {
+        const response = await fetch(`${baseUrl}/veiculos/get-by-id/${id}`);
+        return await response.json();
+    } catch (error) {
+        console.error(`Failed to fetch:`, error);
+    }
+};
+
+
 
 // Função para criar um novo cliente com suporte a FormData
 export const createCliente = async (formData) => {

@@ -24,13 +24,8 @@ const Clientes = () => {
             setLoading(true);
             setError(null);
             try {
-                const resposta = await fetchClientes();
-                if (resposta.ok) {
-                    const dados = await resposta.json();
-                    setClientes(dados);
-                } else {
-                    throw new Error(`Erro na requisição: ${resposta.status}`);
-                }
+                const dados = await fetchClientes();
+                setClientes(dados);
             } catch (error) {
                 console.error('Falha ao buscar dados dos clientes:', error);
                 setError('Falha ao buscar dados dos clientes');
@@ -57,6 +52,7 @@ const Clientes = () => {
                     <CTable striped hover responsive>
                         <CTableHead>
                             <CTableRow>
+                                <CTableHeaderCell>ID</CTableHeaderCell>
                                 <CTableHeaderCell>Nome</CTableHeaderCell>
                                 <CTableHeaderCell>CPF/CNPJ</CTableHeaderCell>
                                 <CTableHeaderCell>Endereço</CTableHeaderCell>
@@ -68,6 +64,7 @@ const Clientes = () => {
                             {clientes.length > 0 ? (
                                 clientes.map((cliente) => (
                                     <CTableRow key={cliente.id}>
+                                        <CTableDataCell>{cliente.id}</CTableDataCell>
                                         <CTableDataCell>{cliente.clienteNome}</CTableDataCell>
                                         <CTableDataCell>{cliente.cpfCnpj}</CTableDataCell>
                                         <CTableDataCell>{cliente.endereco}</CTableDataCell>
